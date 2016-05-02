@@ -5,13 +5,20 @@ import android.graphics.Paint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.CandleStickChart;
+import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.CandleData;
 import com.github.mikephil.charting.data.CandleDataSet;
 import com.github.mikephil.charting.data.CandleEntry;
+import com.github.mikephil.charting.data.DataSet;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.listener.OnDrawListener;
 
 import java.util.ArrayList;
 
@@ -29,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initChart() {
         mChart.setDescription("");
-        mChart.setNoDataText("你好");
+        mChart.setNoDataText("暂时没有数据");
         mChart.setMaxVisibleValueCount(60);
         mChart.setPinchZoom(false);
         mChart.setDrawGridBackground(false);
@@ -49,6 +56,12 @@ public class MainActivity extends AppCompatActivity {
         mChart.getLegend().setEnabled(false);
         CandleData candleData = getCandleData();
 
+
+        mChart.setDoubleTapToZoomEnabled(false);//双击放大关闭
+        mChart.setScaleYEnabled(false);//纵向zoom关闭
+//        int highestVisibleXIndex = mChart.getHighestVisibleXIndex();
+//        Log.d("highestVisibleXIndex", highestVisibleXIndex+"");
+
         mChart.setData(candleData);
         mChart.invalidate();
 
@@ -56,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
     private CandleData getCandleData() {
 
-        ArrayList<CandleEntry> yVals1 = new ArrayList<>();
+        ArrayList<CandleEntry> candleYvals1 = new ArrayList<>();
         for (int i = 0; i < 40; i++) {
             float mult = (100 + 1);
             float val = (float) (Math.random() * 40) + mult;
@@ -69,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
             boolean even = i % 2 == 0;
 
-            yVals1.add(new CandleEntry(i, val + high, val - low, even ? val + open : val - open,
+            candleYvals1.add(new CandleEntry(i, val + high, val - low, even ? val + open : val - open,
                     even ? val - close : val + close));
         }
 
@@ -78,8 +91,10 @@ public class MainActivity extends AppCompatActivity {
             xVals.add("" + (1990 + i));
         }
 
-        CandleDataSet set1 = new CandleDataSet(yVals1, "Data Set");
+        CandleDataSet set1 = new CandleDataSet(candleYvals1, "Data Set");
         set1.setAxisDependency(YAxis.AxisDependency.LEFT);
+
+
         set1.setShadowColor(Color.DKGRAY);
         set1.setShadowWidth(0.7f);
         set1.setDecreasingColor(Color.RED);
@@ -87,8 +102,38 @@ public class MainActivity extends AppCompatActivity {
         set1.setIncreasingColor(Color.rgb(122, 242, 84));
         set1.setIncreasingPaintStyle(Paint.Style.FILL);
         set1.setNeutralColor(Color.BLUE);
-        CandleData data = new CandleData(xVals, set1);
 
-        return data;
+
+        return new CandleData(xVals, set1);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.candle_menu, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.filtscreen:
+                mChart.fitScreen();
+                break;
+            case R.id.getchartmax:
+                float yChartMax = mChart.getYChartMax();
+                float yChartMin = mChart.getYChartMin();
+                Toast.makeText(this,yChartMax +":::::::::::"+ yChartMin,Toast.LENGTH_SHORT).show();
+                Log.d("getChartMax", yChartMax +":::::::::::"+ yChartMin);
+                break;
+            case R.id.double_tap:
+                mChart.setDoubleTapToZoomEnabled(!mChart.isDoubleTapToZoomEnabled());
+                break;
+            default:
+                break;
+        }
+
+
+        return true;
     }
 }

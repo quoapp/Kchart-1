@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/filtscreen"
+        android:title="重置视图"/>
+    <item
+        android:id="@+id/getchartmax"
+        android:title="获得Y最大最小值"/>
+    <item
+        android:id="@+id/double_tap"
+        android:title="开关双击"/>
+
+</menu>

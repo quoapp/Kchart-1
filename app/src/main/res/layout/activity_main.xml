@@ -16,10 +16,13 @@
 
     <com.github.mikephil.charting.charts.CandleStickChart
         android:id="@+id/candle_chart"
-        android:background="@android:color/white"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="250dp"
+        android:background="@android:color/white" />
 
-    </com.github.mikephil.charting.charts.CandleStickChart>
+    <com.github.mikephil.charting.charts.BarChart
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 
 </LinearLayout>
