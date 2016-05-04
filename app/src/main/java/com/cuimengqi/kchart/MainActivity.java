@@ -1,5 +1,6 @@
 package com.cuimengqi.kchart;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -15,7 +16,7 @@ import android.widget.Toast;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.CandleStickChart;
 import com.github.mikephil.charting.charts.Chart;
-import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -24,9 +25,12 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.CandleData;
 import com.github.mikephil.charting.data.CandleDataSet;
 import com.github.mikephil.charting.data.CandleEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.util.ArrayList;
 
@@ -36,6 +40,37 @@ public class MainActivity extends AppCompatActivity {
     private BarChart barChart;
     private BarData barData;
 
+    private class CandleMarkerView extends MarkerView {
+
+        /**
+         * Constructor. Sets up the MarkerView with a custom layout resource.
+         *
+         * @param context
+         * @param layoutResource the layout resource to use for the MarkerView
+         */
+        public CandleMarkerView(Context context, int layoutResource) {
+            super(context, R.layout.candle_markerview);
+        }
+
+        @Override
+        public void refreshContent(Entry e, Highlight highlight) {
+
+        }
+
+        @Override
+        public int getXOffset(float xpos) {
+            return 0;
+        }
+
+        @Override
+        public int getYOffset(float ypos) {
+            return 0;
+        }
+    }
+
+    /**
+     * 两个图的手势接口，使所有图像同步相应手势接口
+     */
     private class CoupleChartGestureListener implements OnChartGestureListener {
 
         private Chart srcChart;
@@ -130,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
     private void initBarChart() {
         barChart.setDrawBarShadow(false);//背后阴影
         barChart.setDrawValueAboveBar(true);//entry数值显示位置
+        barChart.setAutoScaleMinMaxEnabled(true);
 
         barChart.setDescription("");
         barChart.setMaxVisibleValueCount(60);
@@ -138,21 +174,25 @@ public class MainActivity extends AppCompatActivity {
         barChart.setScaleYEnabled(false);
         barChart.setDrawGridBackground(false);
 
+        //保持和蜡烛图坐标一致，使得宽度报纸一致
         XAxis xAxis = barChart.getXAxis();
         xAxis.setEnabled(false);
+
         YAxis axisLeft = barChart.getAxisLeft();
+        axisLeft.setDrawGridLines(false);
+        axisLeft.setDrawAxisLine(false);
+        axisLeft.setTextColor(Color.TRANSPARENT);
+
         YAxis axisRight = barChart.getAxisRight();
-        axisLeft.setEnabled(false);
         axisRight.setEnabled(false);
 
-        Legend l = mChart.getLegend();
-        l.setEnabled(false);
 
-
-        barChart.setAutoScaleMinMaxEnabled(true);
-
+        barChart.getLegend().setEnabled(false);
         barChart.setData(barData);
-
+//        barChart.setVisibleXRangeMaximum(barChart.getWidth()/4);
+        barChart.invalidate();
+        ViewPortHandler viewPortHandler = barChart.getViewPortHandler();
+        viewPortHandler.setMaximumScaleX(2);//设置最大的缩放比
     }
 
     private void initCandleStickChart() {
@@ -161,6 +201,10 @@ public class MainActivity extends AppCompatActivity {
         mChart.setMaxVisibleValueCount(60);
         mChart.setPinchZoom(false);
         mChart.setDrawGridBackground(false);
+
+        mChart.setDoubleTapToZoomEnabled(false);//双击放大关闭
+        mChart.setScaleYEnabled(false);//纵向zoom关闭
+        mChart.setAutoScaleMinMaxEnabled(true);
 
         XAxis xAxis = mChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -174,18 +218,21 @@ public class MainActivity extends AppCompatActivity {
 
         YAxis rightAxis = mChart.getAxisRight();
         rightAxis.setEnabled(false);
+
+
         mChart.getLegend().setEnabled(false);
         CandleData candleData = getCandleData();
 
 
-        mChart.setDoubleTapToZoomEnabled(false);//双击放大关闭
-        mChart.setScaleYEnabled(false);//纵向zoom关闭
-        mChart.setAutoScaleMinMaxEnabled(true);
 //        int highestVisibleXIndex = mChart.getHighestVisibleXIndex();
 //        Log.d("highestVisibleXIndex", highestVisibleXIndex+"");
 
         mChart.setData(candleData);
+//        mChart.setVisibleXRangeMaximum(mChart.getWidth()/4);
         mChart.invalidate();
+        ViewPortHandler viewPortHandler = mChart.getViewPortHandler();
+        viewPortHandler.setMaximumScaleX(2);
+        mChart.setMarkerView(new CandleMarkerView(this, 0));
 
     }
 
