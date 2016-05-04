@@ -59,6 +59,7 @@ public class Chart extends View {
         //X轴加粗
         paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.STROKE);
+
         paint.setStrokeWidth(DenstyUtils.dip2px(context, 0.8f));
         canvas.drawLine(
                 0,
@@ -87,9 +88,12 @@ public class Chart extends View {
 //                DenstyUtils.dip2px(context, -150),
 //                paint);
         //坐标值
+        //待增加sp-px转换
         paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.FILL);
         paint.setTextSize(48);
+
+        //横坐标值
         paint.setTextAlign(Paint.Align.LEFT);
         canvas.drawText("2016-4-29", 0, 48 + timePadding, paint);
         paint.setTextAlign(Paint.Align.CENTER);
@@ -97,20 +101,23 @@ public class Chart extends View {
         paint.setTextAlign(Paint.Align.RIGHT);
         canvas.drawText("2016-5-28", width - leftMargin, 48 + timePadding, paint);
 
-        //纵坐标
+        //纵坐标收益
         paint.setTextAlign(Paint.Align.LEFT);
         canvas.drawText("00.00%", width - leftMargin + valuePadding, 0, paint);
         canvas.drawText("50.00%", width - leftMargin + valuePadding, DenstyUtils.dip2px(context, -50), paint);
         canvas.drawText("100.00%", width - leftMargin + valuePadding, DenstyUtils.dip2px(context, -100), paint);
 
         //绘制折线
+        //初始化值
         List<Float> integers = new ArrayList<>();
         integers.add((float) -10);
         integers.add((float) -110);
         integers.add((float) -98);
         integers.add((float) -20);
         integers.add((float) -130);
+        //纵坐标
         List<Float> yvalues = FormYvalues(integers);
+        //横坐标
         float Xvalues[] = {
                 chartPadding,
                 chartPadding + Xpadding,
@@ -118,32 +125,36 @@ public class Chart extends View {
                 chartPadding + Xpadding * 3,
                 chartPadding + Xpadding * 4};
 
+        //绘制路径
         path = new Path();
+        //绘制透明线填充
+        Chart.paint.setColor(Color.TRANSPARENT);
+        Chart.paint.setStyle(Paint.Style.STROKE);
+        Chart.path.moveTo(Xvalues[0], 0);
+        Chart.path.moveTo(Xvalues[0], yvalues.get(0));
+        canvas.drawPath(Chart.path, Chart.paint);
 
-        paint.setColor(Color.TRANSPARENT);
-        paint.setStyle(Paint.Style.STROKE);
-        path.moveTo(Xvalues[0], 0);
-        path.moveTo(Xvalues[0], yvalues.get(0));
-        canvas.drawPath(path, paint);
+        //绘制曲线
+        Chart.paint.setStrokeWidth(DenstyUtils.dip2px(context, 2));
+        Chart.paint.setStyle(Paint.Style.STROKE);
+        Chart.paint.setColor(Color.WHITE);
+        Chart.path.lineTo(Xvalues[1], yvalues.get(1));
+        Chart.path.lineTo(Xvalues[2], yvalues.get(2));
+        Chart.path.lineTo(Xvalues[3], yvalues.get(3));
+        Chart.path.lineTo(Xvalues[4], yvalues.get(4));
+        canvas.drawPath(Chart.path, Chart.paint);
 
-        paint.setStrokeWidth(DenstyUtils.dip2px(context, 2));
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setColor(Color.WHITE);
-        path.lineTo(Xvalues[1], yvalues.get(1));
-        path.lineTo(Xvalues[2], yvalues.get(2));
-        path.lineTo(Xvalues[3], yvalues.get(3));
-        path.lineTo(Xvalues[4], yvalues.get(4));
-        canvas.drawPath(path, paint);
+        //绘制透明线填充
+        Chart.paint.setColor(Color.TRANSPARENT);
+        Chart.path.lineTo(Xvalues[4], 0);
+        Chart.path.lineTo(Xvalues[0], 0);
+        canvas.drawPath(Chart.path, Chart.paint);
 
-        paint.setColor(Color.TRANSPARENT);
-        path.lineTo(Xvalues[4], 0);
-        path.lineTo(Xvalues[0], 0);
-        canvas.drawPath(path, paint);
-
-        paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.WHITE);
-        paint.setAlpha(120);
-        canvas.drawPath(path, paint);
+        //填充曲线到X轴
+        Chart.paint.setStyle(Paint.Style.FILL);
+        Chart.paint.setColor(Color.WHITE);
+        Chart.paint.setAlpha(120);
+        canvas.drawPath(Chart.path, Chart.paint);
 
     }
 
