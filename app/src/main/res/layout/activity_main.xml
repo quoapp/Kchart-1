@@ -10,7 +10,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.cuimengqi.kchart.MainActivity">
 
-    <com.cuimengqi.kchart.Chart
+    <com.cuimengqi.kchart.LocalChart
         android:layout_width="match_parent"
         android:layout_height="200dp" />
 
@@ -21,6 +21,8 @@
         android:background="@android:color/white" />
 
     <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/bar_chart"
+        android:background="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

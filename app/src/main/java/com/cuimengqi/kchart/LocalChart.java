@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by treycc on 2016/5/1.
  */
-public class Chart extends View {
+public class LocalChart extends View {
 
     private static Paint paint;
     private static Path path;
@@ -27,7 +27,7 @@ public class Chart extends View {
     private float Xpadding;
     private float leftMargin;
 
-    public Chart(Context context, AttributeSet attrs) {
+    public LocalChart(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
         init();
@@ -42,7 +42,7 @@ public class Chart extends View {
         leftMargin = DenstyUtils.dip2px(context, 64);
     }
 
-    public Chart(Context context) {
+    public LocalChart(Context context) {
         super(context, null);
     }
 
@@ -128,33 +128,33 @@ public class Chart extends View {
         //绘制路径
         path = new Path();
         //绘制透明线填充
-        Chart.paint.setColor(Color.TRANSPARENT);
-        Chart.paint.setStyle(Paint.Style.STROKE);
-        Chart.path.moveTo(Xvalues[0], 0);
-        Chart.path.moveTo(Xvalues[0], yvalues.get(0));
-        canvas.drawPath(Chart.path, Chart.paint);
+        LocalChart.paint.setColor(Color.TRANSPARENT);
+        LocalChart.paint.setStyle(Paint.Style.STROKE);
+        LocalChart.path.moveTo(Xvalues[0], 0);
+        LocalChart.path.moveTo(Xvalues[0], yvalues.get(0));
+        canvas.drawPath(LocalChart.path, LocalChart.paint);
 
         //绘制曲线
-        Chart.paint.setStrokeWidth(DenstyUtils.dip2px(context, 2));
-        Chart.paint.setStyle(Paint.Style.STROKE);
-        Chart.paint.setColor(Color.WHITE);
-        Chart.path.lineTo(Xvalues[1], yvalues.get(1));
-        Chart.path.lineTo(Xvalues[2], yvalues.get(2));
-        Chart.path.lineTo(Xvalues[3], yvalues.get(3));
-        Chart.path.lineTo(Xvalues[4], yvalues.get(4));
-        canvas.drawPath(Chart.path, Chart.paint);
+        LocalChart.paint.setStrokeWidth(DenstyUtils.dip2px(context, 2));
+        LocalChart.paint.setStyle(Paint.Style.STROKE);
+        LocalChart.paint.setColor(Color.WHITE);
+        LocalChart.path.lineTo(Xvalues[1], yvalues.get(1));
+        LocalChart.path.lineTo(Xvalues[2], yvalues.get(2));
+        LocalChart.path.lineTo(Xvalues[3], yvalues.get(3));
+        LocalChart.path.lineTo(Xvalues[4], yvalues.get(4));
+        canvas.drawPath(LocalChart.path, LocalChart.paint);
 
         //绘制透明线填充
-        Chart.paint.setColor(Color.TRANSPARENT);
-        Chart.path.lineTo(Xvalues[4], 0);
-        Chart.path.lineTo(Xvalues[0], 0);
-        canvas.drawPath(Chart.path, Chart.paint);
+        LocalChart.paint.setColor(Color.TRANSPARENT);
+        LocalChart.path.lineTo(Xvalues[4], 0);
+        LocalChart.path.lineTo(Xvalues[0], 0);
+        canvas.drawPath(LocalChart.path, LocalChart.paint);
 
         //填充曲线到X轴
-        Chart.paint.setStyle(Paint.Style.FILL);
-        Chart.paint.setColor(Color.WHITE);
-        Chart.paint.setAlpha(120);
-        canvas.drawPath(Chart.path, Chart.paint);
+        LocalChart.paint.setStyle(Paint.Style.FILL);
+        LocalChart.paint.setColor(Color.WHITE);
+        LocalChart.paint.setAlpha(120);
+        canvas.drawPath(LocalChart.path, LocalChart.paint);
 
     }
 
