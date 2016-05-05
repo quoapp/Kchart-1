@@ -12,19 +12,22 @@
 
     <com.cuimengqi.kchart.LocalChart
         android:layout_width="match_parent"
-        android:layout_height="200dp" />
+        android:layout_height="0dp"
+        android:layout_weight="2" />
 
     <com.github.mikephil.charting.charts.CandleStickChart
         android:id="@+id/candle_chart"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="0dp"
+        android:layout_weight="2"
         android:background="@android:color/white" />
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/bar_chart"
-        android:background="@android:color/white"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@android:color/white" />
 
 
 </LinearLayout>
